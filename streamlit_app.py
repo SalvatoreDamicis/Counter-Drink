@@ -1,8 +1,10 @@
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+import pandas as pd
 from utils import compute_price
+#001219, #005f73, #0a9396, #94d2bd, #e9d8a6, #ee9b00, #ca6702, #bb3e03, #ae2012, #9b2226
+palette = ['#0081a7', '#00afb9', '#fdfcdc', "#fed9b7", "#f07167"]
 
 st.title(" Liceo Counter Drink")
 st.write("Benvenuto al Liceo Counter Drink! 🍹🍸🥃")
@@ -26,13 +28,21 @@ for col, drink in zip(cols, drink_list):
 table_data = [[drink, count] for drink, count in st.session_state.drink_counter.items()]
 
 # Mostra il grafico a barre
-fig, ax = plt.subplots()
 drink_names = list(st.session_state.drink_counter.keys())
 drink_counts = compute_price(list(st.session_state.drink_counter.values()))
-sns.barplot(x=drink_names, y=drink_counts, ax=ax)
-ax.set_ylabel("Prezzo")
+
+# Creazione del grafico con valori sopra le barre
+fig, ax = plt.subplots()
+sns.barplot(x=drink_names, y=drink_counts, ax=ax, palette=palette)
+
+# Aggiungere il valore sopra ogni barra
+for index, value in enumerate(drink_counts):
+    ax.text(index, value + 0.1, str(value) + ' €', ha='center', va='bottom')
+
 ax.set_title("Selezione dei Drink")
+ax.yaxis.set_visible(False)
+
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
 st.pyplot(fig)
-
-
-st.table(table_data)
