@@ -1,7 +1,6 @@
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
-import pandas as pd
 from utils import compute_price
 #001219, #005f73, #0a9396, #94d2bd, #e9d8a6, #ee9b00, #ca6702, #bb3e03, #ae2012, #9b2226
 palette = ['#0081a7', '#00afb9', '#fdfcdc', "#fed9b7", "#f07167"]
