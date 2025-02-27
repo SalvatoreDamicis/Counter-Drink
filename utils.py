@@ -1,8 +1,8 @@
 from typing import List
 import pandas as pd
 
-LOWER_PRICE = 3
-START_PRICE = 6
+LOWER_PRICE = 5
+START_PRICE = 8
 
 
 def compute_price(list_of_counts: List[int]):
