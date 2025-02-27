@@ -1,8 +1,47 @@
 from typing import List
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import streamlit as st
+import base64
 
-LOWER_PRICE = 5
+LOWER_PRICE = 4
 START_PRICE = 8
+UPPER_PRICE = 12
+
+
+def set_background(image_file):
+    with open(image_file, "rb") as img_file:
+        encoded_string = base64.b64encode(img_file.read()).decode()
+
+    page_bg_img = f'''
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpg;base64,{encoded_string}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }}
+    </style>
+    '''
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+
+def create_plot(drink_names, drink_counts, colors):
+    # Creazione del grafico con valori sopra le barre
+    fig, ax = plt.subplots(figsize=(16, 7))
+    sns.barplot(x=drink_names, y=drink_counts, ax=ax, palette=colors)
+
+    # Aggiungere il valore sopra ogni barra
+    for index, value in enumerate(drink_counts):
+        ax.text(index, value + 0.1, str(value) + ' €', ha='center', va='bottom')
+
+    ax.set_title("Selezione dei Drink")
+    ax.yaxis.set_visible(False)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    st.pyplot(fig)
 
 
 def compute_price(list_of_counts: List[int]):
@@ -44,4 +83,4 @@ if __name__ == "__main__":
     # test_compute_price()
     simulation_party()
 
-    # todo: make a casual simulator 
+    # todo: make a casual simulator
