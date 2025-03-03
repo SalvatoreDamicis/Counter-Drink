@@ -10,7 +10,8 @@ START_PRICE = 8
 UPPER_PRICE = 12
 
 
-def set_background(image_file):
+def set_background():
+    image_file = 'background.jpg'
     with open(image_file, "rb") as img_file:
         encoded_string = base64.b64encode(img_file.read()).decode()
 
@@ -25,6 +26,27 @@ def set_background(image_file):
     </style>
     '''
     st.markdown(page_bg_img, unsafe_allow_html=True)
+
+
+def set_background_video():
+    # 🔥 Link diretto al video (sostituiscilo con il tuo)
+    gif_path = 'stonks.gif'
+    with open(gif_path, "rb") as gif_file:
+        gif_base64 = base64.b64encode(gif_file.read()).decode()
+
+    # HTML + CSS per impostare la GIF come sfondo
+    background_html = f"""
+        <style>
+            .stApp {{
+                background: url("data:image/gif;base64,{gif_base64}") no-repeat center center fixed;
+                background-size: cover;
+            }}
+        </style>
+        """
+
+    st.markdown(background_html, unsafe_allow_html=True)
+
+    st.markdown(background_html, unsafe_allow_html=True)
 
 
 def create_plot(drink_names, drink_counts, colors):

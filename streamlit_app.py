@@ -1,8 +1,5 @@
 import streamlit as st
-import seaborn as sns
-import matplotlib.pyplot as plt
-from utils import compute_price, set_background, create_plot
-import base64
+from utils import compute_price, create_plot, set_background_video
 import time
 
 # 001219, #005f73, #0a9396, #94d2bd, #e9d8a6, #ee9b00, #ca6702, #bb3e03, #ae2012, #9b2226
@@ -13,15 +10,14 @@ drink_list = ["Mojito", "Martini", "Negroni", "Old Fashioned",
               "Pina Colada", "Manhattan"]
 
 st.set_page_config(layout="wide")
+set_background_video()
+
 # 🔥 Creiamo margini laterali per restringere il contenuto
 left_margin, main_content, right_margin = st.columns([0.2, 2.6, 0.2])
 
-set_background("background.jpg")
-# Inserire il CSS nella pagina
-
 # Lista di drink
 # Colori base e colore evidenziato
-palette = ["#3498db"] * len(drink_list)  # Blu di default
+palette = ["#e0e1dd"] * len(drink_list)  # Blu di default
 highlight_color = "#e74c3c"  # Rosso per evidenziare
 
 # Inizializza il conteggio dei drink nella sessione
