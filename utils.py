@@ -46,8 +46,6 @@ def set_background_video():
 
     st.markdown(background_html, unsafe_allow_html=True)
 
-    st.markdown(background_html, unsafe_allow_html=True)
-
 
 def create_plot(drink_names, drink_counts, colors):
     # Creazione del grafico con valori sopra le barre
@@ -100,6 +98,8 @@ def simulation_party():
     sim.to_csv('simulation_party.csv')
     print(sum(sim['buy']))
 
+
+# Funzione per mostrare/nascondere il pop-up
 
 if __name__ == "__main__":
     # test_compute_price()

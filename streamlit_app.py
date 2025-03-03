@@ -1,22 +1,12 @@
 import streamlit as st
 from utils import compute_price, create_plot, set_background_video
 import time
+from PIL import Image
 
-# 001219, #005f73, #0a9396, #94d2bd, #e9d8a6, #ee9b00, #ca6702, #bb3e03, #ae2012, #9b2226
-# palette = ['#0081a7', '#00afb9', '#fdfcdc', "#fed9b7", "#f07167"]
-
+TIMER_DURATION = 20  # 5 minuti = 300 secondi
 drink_list = ["Mojito", "Martini", "Negroni", "Old Fashioned",
               "Margarita", "Daiquiri", "Whiskey Sour", "Cosmopolitan",
               "Pina Colada", "Manhattan"]
-
-st.set_page_config(layout="wide")
-set_background_video()
-
-# 🔥 Creiamo margini laterali per restringere il contenuto
-left_margin, main_content, right_margin = st.columns([0.2, 2.6, 0.2])
-
-# Lista di drink
-# Colori base e colore evidenziato
 palette = ["#e0e1dd"] * len(drink_list)  # Blu di default
 highlight_color = "#e74c3c"  # Rosso per evidenziare
 
@@ -29,6 +19,26 @@ if 'highlight_end' not in st.session_state:
     st.session_state.highlight_end = 0
 if 'drink_history' not in st.session_state:
     st.session_state.drink_history = []  # Lista per lo storico
+if "show_image" not in st.session_state:
+    st.session_state.show_image = False
+if "start_time" not in st.session_state:
+    st.session_state.start_time = time.time()
+
+st.set_page_config(layout="wide")
+set_background_video()
+col1, col2 = st.columns([15, 1])
+
+with col2:
+    # Bottone per resettare e mostrare/nascondere l'immagine
+    if st.button(" "):
+        st.session_state.show_image = not st.session_state.show_image  # Alterna la visibilità dell'immagine
+
+if st.session_state.show_image:
+    img = Image.open("crollo_borsa.jpg")
+    st.image(img, use_container_width=True)
+
+# 🔥 Creiamo margini laterali per restringere il contenuto
+left_margin, main_content, right_margin = st.columns([0.2, 2.6, 0.2])
 
 # 📌 Espande lo spazio centrale con CSS
 custom_css = """
@@ -54,7 +64,7 @@ custom_css = """
 st.markdown(custom_css, unsafe_allow_html=True)
 
 with main_content:
-    st.columns([0.3, 0.5, 0.2])[1].title(" Liceo Counter Drink 🍹🍸🥃")
+    st.columns([0.3, 0.5, 0.2])[1].title(":gray[Stocks Drinks 🍹🍸🥃]")
     # Layout dei pulsanti
     num_cols = 5
     rows = [drink_list[i:i + num_cols] for i in range(0, len(drink_list), num_cols)]  # 2 righe
