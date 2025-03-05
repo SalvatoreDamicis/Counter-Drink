@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 import base64
+import random
 
 LOWER_PRICE = 4
 START_PRICE = 8
@@ -64,16 +65,26 @@ def create_plot(drink_names, drink_counts, colors):
     st.pyplot(fig)
 
 
-def compute_price(list_of_counts: List[int]):
-    price_variation = (START_PRICE - LOWER_PRICE) * len(list_of_counts)
-    sum_votes = sum(list_of_counts)
-    if sum_votes == 0:
-        return [START_PRICE] * len(list_of_counts)
+def compute_price(dict_of_counts: dict, select_drink: str):
+    dict_of_counts_copy = dict_of_counts.copy()
+    for drink, price in dict_of_counts_copy.items():
+        if drink == select_drink:
+            dict_of_counts[drink] = price + 1
+            if dict_of_counts[drink] > UPPER_PRICE:
+                dict_of_counts[drink] = UPPER_PRICE
+            if dict_of_counts[drink] < LOWER_PRICE:
+                dict_of_counts[drink] = LOWER_PRICE
+    if select_drink:
+        drink_to_choose = [drink for drink in dict_of_counts.keys() if drink != select_drink]
+        random_drinks = random.sample(drink_to_choose, 2)
+        for drink in random_drinks:
+            dict_of_counts[drink] = dict_of_counts[drink] - 1
+            if dict_of_counts[drink] > UPPER_PRICE:
+                dict_of_counts[drink] = UPPER_PRICE
+            if dict_of_counts[drink] < LOWER_PRICE:
+                dict_of_counts[drink] = LOWER_PRICE
 
-    percentage = [count / sum_votes for count in list_of_counts]
-    price = [LOWER_PRICE + round(p * price_variation) for p in percentage]
-
-    return price
+    return dict_of_counts
 
 
 def test_compute_price():

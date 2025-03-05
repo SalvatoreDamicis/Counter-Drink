@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import compute_price, create_plot, set_background_video
+from utils import compute_price, create_plot, set_background_video, START_PRICE
 import time
 from PIL import Image
 
@@ -12,7 +12,7 @@ highlight_color = "#e74c3c"  # Rosso per evidenziare
 
 # Inizializza il conteggio dei drink nella sessione
 if 'drink_counter' not in st.session_state:
-    st.session_state.drink_counter = {drink: 0 for drink in drink_list}
+    st.session_state.drink_counter = {drink: START_PRICE for drink in drink_list}
 if 'last_clicked' not in st.session_state:
     st.session_state.last_clicked = None
 if 'highlight_end' not in st.session_state:
@@ -64,7 +64,7 @@ custom_css = """
 st.markdown(custom_css, unsafe_allow_html=True)
 
 with main_content:
-    st.columns([0.3, 0.5, 0.2])[1].title(":gray[Stocks Drinks 🍹🍸🥃]")
+    st.columns([0.3, 0.5, 0.2])[1].title(":green[Stocks Drinks 🍹]")
     # Layout dei pulsanti
     num_cols = 5
     rows = [drink_list[i:i + num_cols] for i in range(0, len(drink_list), num_cols)]  # 2 righe
@@ -78,7 +78,7 @@ with main_content:
                 with col:
                     if drink_index < len(row):  # Evita errori se ci sono meno drink
                         if st.button(row[drink_index], use_container_width=True):
-                            st.session_state.drink_counter[row[drink_index]] += 1
+                            # st.session_state.drink_counter[row[drink_index]] += 1
                             st.session_state.last_clicked = row[drink_index]
                             st.session_state.highlight_end = time.time() + 1
                             st.session_state.drink_history.append(row[drink_index])
@@ -95,20 +95,22 @@ with main_content:
 
     # Mostra il grafico a barre
     drink_names = list(st.session_state.drink_counter.keys())
-    drink_counts = compute_price(list(st.session_state.drink_counter.values()))
+    st.session_state.drink_counter = compute_price(st.session_state.drink_counter,
+                                                   st.session_state.last_clicked)
 
+    drink_counts = list(st.session_state.drink_counter.values())
     create_plot(drink_names, drink_counts, current_palette)
 
     # Ricarica la pagina dopo 1 secondo per rimuovere il colore evidenziato
     if time.time() >= st.session_state.highlight_end:
         st.session_state.last_clicked = None
-        st.session_state.highlight_end = 0
+    st.session_state.highlight_end = 0
 
-# 📌 Storico dei drink sulla destra
-with st.sidebar:
-    st.subheader("📝 Storico Drink Presi")
+    # 📌 Storico dei drink sulla destra
+    with st.sidebar:
+        st.subheader("📝 Sold Drinks")
     if st.session_state.drink_history:
         for drink in reversed(st.session_state.drink_history[-20:]):  # Mostra solo gli ultimi 10
             st.write(f"🍹 {drink}")
     else:
-        st.write("Nessun drink selezionato.")
+        st.write("None.")
