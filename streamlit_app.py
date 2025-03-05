@@ -1,12 +1,10 @@
 import streamlit as st
-from utils import compute_price, create_plot, set_background_video, START_PRICE
+from utils import compute_price, create_plot, set_background_video, START_PRICE, drink_list
 import time
 from PIL import Image
 
 TIMER_DURATION = 20  # 5 minuti = 300 secondi
-drink_list = ["Mojito", "Martini", "Negroni", "Old Fashioned",
-              "Margarita", "Daiquiri", "Whiskey Sour", "Cosmopolitan",
-              "Pina Colada", "Manhattan"]
+
 palette = ["#e0e1dd"] * len(drink_list)  # Blu di default
 highlight_color = "#e74c3c"  # Rosso per evidenziare
 
@@ -107,10 +105,10 @@ with main_content:
     st.session_state.highlight_end = 0
 
     # 📌 Storico dei drink sulla destra
-    with st.sidebar:
-        st.subheader("📝 Sold Drinks")
+with st.sidebar:
+    st.subheader("📝 Sold Drinks")
     if st.session_state.drink_history:
         for drink in reversed(st.session_state.drink_history[-20:]):  # Mostra solo gli ultimi 10
             st.write(f"🍹 {drink}")
     else:
-        st.write("None.")
+        st.write("None")

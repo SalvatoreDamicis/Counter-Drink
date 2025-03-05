@@ -5,10 +5,16 @@ import seaborn as sns
 import streamlit as st
 import base64
 import random
-
-LOWER_PRICE = 4
+drink_list = ["Spritz Aperol", "Spritz Campari", "Negroni", "Americano",
+              "Gin Tonic", "Gin Lemon", "Vodka Lemon", "Paloma",
+              "Cynar Fizz", "Moscow Mule"]
 START_PRICE = 8
-UPPER_PRICE = 12
+LOWER_PRICE = {drink: 5 for drink in drink_list}
+LOWER_PRICE["Spritz Aperol"] = 4
+LOWER_PRICE["Spritz Campari"] = 4
+UPPER_PRICE = {drink: 12 for drink in drink_list}
+UPPER_PRICE["Spritz Aperol"] = 8
+UPPER_PRICE["Spritz Campari"] = 8
 
 
 def set_background():
@@ -70,19 +76,19 @@ def compute_price(dict_of_counts: dict, select_drink: str):
     for drink, price in dict_of_counts_copy.items():
         if drink == select_drink:
             dict_of_counts[drink] = price + 1
-            if dict_of_counts[drink] > UPPER_PRICE:
-                dict_of_counts[drink] = UPPER_PRICE
-            if dict_of_counts[drink] < LOWER_PRICE:
-                dict_of_counts[drink] = LOWER_PRICE
+            if dict_of_counts[drink] > UPPER_PRICE[drink]:
+                dict_of_counts[drink] = UPPER_PRICE[drink]
+            if dict_of_counts[drink] < LOWER_PRICE[drink]:
+                dict_of_counts[drink] = LOWER_PRICE[drink]
     if select_drink:
         drink_to_choose = [drink for drink in dict_of_counts.keys() if drink != select_drink]
         random_drinks = random.sample(drink_to_choose, 2)
         for drink in random_drinks:
             dict_of_counts[drink] = dict_of_counts[drink] - 1
-            if dict_of_counts[drink] > UPPER_PRICE:
-                dict_of_counts[drink] = UPPER_PRICE
-            if dict_of_counts[drink] < LOWER_PRICE:
-                dict_of_counts[drink] = LOWER_PRICE
+            if dict_of_counts[drink] > UPPER_PRICE[drink]:
+                dict_of_counts[drink] = UPPER_PRICE[drink]
+            if dict_of_counts[drink] < LOWER_PRICE[drink]:
+                dict_of_counts[drink] = LOWER_PRICE[drink]
 
     return dict_of_counts
 
